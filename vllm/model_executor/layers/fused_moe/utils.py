@@ -6,9 +6,7 @@ from math import prod
 import torch
 
 from vllm import _custom_ops as ops
-from vllm.model_executor.layers.quantization.utils.fp8_utils import (
-    per_token_group_quant_fp8,
-)
+from vllm import ir
 from vllm.model_executor.layers.quantization.utils.int8_utils import (
     per_token_group_quant_int8,
     per_token_quant_int8,
@@ -145,7 +143,7 @@ def _fp8_quantize(
         assert not per_act_token
         assert len(block_shape) == 2
         _, block_k = block_shape[0], block_shape[1]
-        A, A_scale = per_token_group_quant_fp8(A, block_k)
+        A, A_scale = ir.ops.dynamic_group_quant_fp8(A, block_k)
         assert cdiv(A.size(-1), block_k) == A_scale.size(-1)
 
     return A, A_scale
