@@ -42,7 +42,7 @@ def ref_silu_and_mul_per_block_quant(
 
     if quant_dtype == current_platform.fp8_dtype():
         return ir.ops.dynamic_group_quant_fp8(
-            silu_out, group_size, 1e-10, None, False, False, False, None
+            silu_out, group_size, use_ue8m0=False
         )
     elif quant_dtype == torch.int8:
         return per_token_group_quant_int8(silu_out, group_size=group_size)

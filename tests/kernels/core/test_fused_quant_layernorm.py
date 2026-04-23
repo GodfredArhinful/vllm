@@ -78,12 +78,6 @@ def ref_dynamic_per_token_or_block_quant(
             torch_out, scales = ir.ops.dynamic_group_quant_fp8(
                 torch_out,
                 group_size[1],
-                1e-10,
-                None,
-                False,
-                False,
-                False,
-                None,
             )
         else:
             assert quant_dtype == torch.int8

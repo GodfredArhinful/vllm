@@ -90,12 +90,8 @@ def test_per_token_group_quant_fp8(
     out, scale = ir.ops.dynamic_group_quant_fp8(
         x,
         group_size,
-        1e-10,
-        None,
-        column_major_scales,
-        tma_aligned_scales,
-        None,
-        None,
+        column_major_scales=column_major_scales,
+        tma_aligned_scales=tma_aligned_scales,
     )
 
     assert torch.allclose(out.to(torch.float32), ref_out.to(torch.float32), rtol=0.15)
@@ -171,11 +167,11 @@ def test_w8a8_block_fp8_cutlass_matmul():
     Bs = torch.rand(n_tiles, k_tiles, dtype=torch.float32) * factor_for_scale
 
     A_fp8, As = ir.ops.dynamic_group_quant_fp8(
-        A_fp32, block_size[1], 1e-10, None, False, False, None, None
+        A_fp32, block_size[1]
     )
     # CUTLASS uses column-major format for scales
     A_fp8_cutlass, As_cutlass = ir.ops.dynamic_group_quant_fp8(
-        A_fp32, block_size[1], 1e-10, None, True, False, None, None
+        A_fp32, block_size[1], column_major_scales=True
     )
 
     ref_out = native_w8a8_block_matmul(A_fp8, B_fp8, As, Bs, block_size, out_dtype)
@@ -212,7 +208,7 @@ def test_w8a8_block_fp8_deep_gemm_matmul(M, N, K, block_size, out_dtype, seed):
         pytest.skip(f"Skipping test; invalid size {M}, {N}, {K}")
 
     A_fp8, As_fp8 = ir.ops.dynamic_group_quant_fp8(
-        A_fp32, block_size[1], 1e-10, None, True, True, None, None
+        A_fp32, block_size[1], column_major_scales=True, tma_aligned_scales=True
     )
     B_fp8, Bs_fp8 = per_block_cast_to_fp8(B_fp32, block_size=block_size)
 
@@ -261,7 +257,7 @@ def test_w8a8_block_fp8_flashinfer_matmul(M, N, K, block_size, out_dtype, seed):
     B_bf16 = (torch.rand(N, K, dtype=torch.bfloat16) - 0.5) * 2 * fp8_max
 
     A_fp8, As_fp8 = ir.ops.dynamic_group_quant_fp8(
-        A_bf16, block_size[1], 1e-10, None, False, False, False, None
+        A_bf16, block_size[1]
     )
     B_fp8, Bs_fp8 = per_block_cast_to_fp8(B_bf16, block_size, use_ue8m0=False)
 

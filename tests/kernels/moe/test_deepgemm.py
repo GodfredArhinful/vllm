@@ -96,7 +96,7 @@ def run_single_case(m, n, k, topk, num_experts, block_size):
         .clamp_max_(1)
     )
     _, a1_scale = ir.ops.dynamic_group_quant_fp8(
-        tokens_bf16, block_size[1], 1e-10, None, False, False, None, None
+        tokens_bf16, block_size[1]
     )
 
     # expert weight tensors

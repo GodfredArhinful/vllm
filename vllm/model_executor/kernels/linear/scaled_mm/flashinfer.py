@@ -273,12 +273,8 @@ def _dynamic_flashinfer_deepgemm_blockscale_gemm_impl(
         q_input, input_scale = ir.ops.dynamic_group_quant_fp8(
             input,
             group_size,
-            1e-10,
-            None,
-            True,
-            False,
-            use_deep_gemm_e8m0,
-            None,
+            column_major_scales=True,
+            use_ue8m0=use_deep_gemm_e8m0,
         )
         output = torch.empty(
             (q_input.shape[0], weight.shape[0]),

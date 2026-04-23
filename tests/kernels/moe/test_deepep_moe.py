@@ -309,7 +309,7 @@ def torch_moe_impl(
         assert not per_act_token_quant
         a = test_tensors.rank_tokens
         aq, aq_scale = ir.ops.dynamic_group_quant_fp8(
-            a, 128, 1e-10, None, False, False, False, None
+            a, 128
         )
         a = (
             (aq.view(-1, 128).to(torch.float32) * aq_scale.view(-1, 1))

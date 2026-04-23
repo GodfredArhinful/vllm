@@ -23,7 +23,7 @@ def test_dynamic_group_quant_fp8_matches_execute():
         x, group_size, column_major_scales=True
     )
     q_ir, s_ir = ir.ops.dynamic_group_quant_fp8(
-        x, group_size, 1e-10, None, True, False, None, None
+        x, group_size, column_major_scales=True
     )
 
     torch.testing.assert_close(q_ir, q_ref)
@@ -42,7 +42,7 @@ def test_dynamic_group_quant_fp8_optional_out_buffer():
     out_q = torch.empty(x.shape, device=x.device, dtype=dtype)
 
     q_ir, s_ir = ir.ops.dynamic_group_quant_fp8(
-        x, group_size, 1e-10, None, True, False, None, out_q
+        x, group_size, column_major_scales=True, out=out_q
     )
     q_ref, s_ref = fp8_utils._execute_per_token_group_quant_fp8(
         x, group_size, column_major_scales=True, out_q=out_q.clone()

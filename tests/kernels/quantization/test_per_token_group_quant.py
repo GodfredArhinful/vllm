@@ -33,12 +33,9 @@ def test_per_token_group_quant_fp8(
     out_q, scale = ir.ops.dynamic_group_quant_fp8(
         x,
         group_size,
-        1e-10,
-        None,
-        column_major,
-        tma_aligned,
-        scale_ue8m0,
-        None,
+        column_major_scales=column_major,
+        tma_aligned_scales=tma_aligned,
+        use_ue8m0=scale_ue8m0,
     )
 
     # triton ref
@@ -46,12 +43,8 @@ def test_per_token_group_quant_fp8(
         ref_q, ref_s = ir.ops.dynamic_group_quant_fp8(
             x,
             group_size,
-            1e-10,
-            None,
-            column_major,
-            False,
-            scale_ue8m0,
-            None,
+            column_major_scales=column_major,
+            use_ue8m0=scale_ue8m0,
         )
 
     assert torch.allclose(out_q.float(), ref_q.float(), atol=0.15, rtol=0.15)
@@ -144,12 +137,7 @@ def test_per_token_group_quant_fp8_packed(
         ref_q, ref_s = ir.ops.dynamic_group_quant_fp8(
             x,
             group_size,
-            1e-10,
-            None,
-            False,
-            False,
-            True,
-            None,
+            use_ue8m0=True,
         )
 
     # Quantized values must match.
