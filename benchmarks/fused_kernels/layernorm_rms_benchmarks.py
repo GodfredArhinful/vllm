@@ -107,12 +107,7 @@ def unfused_groupwise_fp8_impl(
     torch_out, _ = ir.ops.dynamic_group_quant_fp8(
         torch_out,
         group_size[1],
-        1e-10,
-        None,
-        False,
-        False,
-        False,
-        None,
+        use_ue8m0=False,
     )
 
 

@@ -695,12 +695,7 @@ class Indexer(nn.Module):
         q_fp8, q_scale = ir.ops.dynamic_group_quant_fp8(
             q,
             self.quant_block_size,
-            1e-10,
-            None,
-            False,
-            False,
-            self.scale_fmt is not None,
-            None,
+            use_ue8m0=self.scale_fmt is not None,
         )
         q_fp8 = q_fp8.view(-1, self.n_head, self.head_dim)
         q_scale = q_scale.view(-1, self.n_head, 1)

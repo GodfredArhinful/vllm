@@ -107,12 +107,10 @@ class QuantFP8(CustomOp):
             return ir.ops.dynamic_group_quant_fp8(
                 x,
                 self.group_size,
-                1e-10,
-                _FP8_DTYPE,
-                self.column_major_scales,
-                self.tma_aligned_scales,
-                self.use_ue8m0,
-                None,
+                dtype=_FP8_DTYPE,
+                column_major_scales=self.column_major_scales,
+                tma_aligned_scales=self.tma_aligned_scales,
+                use_ue8m0=self.use_ue8m0,
             )
 
         assert (scale is not None) == self.static

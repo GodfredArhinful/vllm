@@ -227,12 +227,8 @@ class DeepGemmExperts(mk.FusedMoEExpertsModular):
         return ir.ops.dynamic_group_quant_fp8(
             act_out,
             block_k,
-            1e-10,
-            None,
-            True,
-            False,
-            None,
-            output,
+            column_major_scales=True,
+            out=output,
         )
 
     def apply(

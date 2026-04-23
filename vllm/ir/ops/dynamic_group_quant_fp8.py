@@ -32,14 +32,14 @@ def dynamic_group_quant_fp8(
     ``fp8_utils._execute_per_token_group_quant_fp8``.
     """
     return _execute_per_token_group_quant_fp8(
-        x,
-        group_size,
-        eps,
-        dtype,
-        column_major_scales,
-        tma_aligned_scales,
-        out,
-        use_ue8m0,
+        x=x,
+        group_size=group_size,
+        eps=eps,
+        dtype=dtype,
+        column_major_scales=column_major_scales,
+        tma_aligned_scales=tma_aligned_scales,
+        use_ue8m0=use_ue8m0,
+        out_q=out,
     )
 
 
